@@ -1,0 +1,428 @@
+# Build FixMyRoad — AI-Powered Pothole Reporting Platform
+
+Act as an expert UI/UX designer, full-stack developer, and AI application engineer. Build a complete, modern, responsive website called **FixMyRoad**, an AI-powered platform that helps citizens report potholes and enables municipal officers to review, prioritize, assign, and resolve road repair complaints.
+
+The application must be visually impressive, vibrant, bright, professional, and easy to use. It should look like a polished civic-tech startup product rather than a basic college project.
+
+Do not build only a landing page or static mockup. Implement the main user flows and make buttons, forms, filters, status updates, photo uploads, and navigation functional.
+
+## 1. Design and visual identity
+
+Create an attractive interface with a bright, clean, energetic, and trustworthy design.
+
+**Color palette:**
+- Primary: vivid electric blue `#2563EB`
+- Secondary: vibrant teal `#14B8A6`
+- Accent: sunny yellow `#FACC15`
+- Background: soft off-white `#F8FAFC`
+- Main text: deep navy `#172554`
+- Success: fresh green
+- Warning: warm orange
+- High severity: vivid red
+
+Use white surfaces, soft gradient backgrounds, rounded cards, subtle shadows, colorful icons, and smooth micro-interactions. Use gradients sparingly for the hero section, primary buttons, statistics, and visual accents.
+
+**Design style:**
+- Modern SaaS dashboard mixed with a civic-tech application.
+- Large, readable typography with clear visual hierarchy.
+- Beautiful illustrations or photographs of roads and potholes where appropriate.
+- Rounded cards, clean spacing, attractive empty states, and clear status badges.
+- Smooth hover effects, subtle transitions, loading skeletons, and toast notifications.
+- Use Lucide icons consistently.
+- Use a professional font such as Inter or Plus Jakarta Sans.
+- Avoid dull gray-only interfaces, excessive borders, clutter, and too many gradients.
+- Ensure sufficient color contrast and keyboard accessibility.
+
+The website must be fully responsive on desktop, tablet, and mobile.
+
+## 2. Application navigation
+
+Create a consistent application layout with the FixMyRoad logo, navigation sidebar on desktop, and responsive mobile navigation.
+
+Include:
+- Home / Overview
+- Report a Pothole
+- My Reports
+- Officer Dashboard
+- How It Works
+- Help / About
+- Role switcher: Citizen / Municipal Officer
+
+Use an attractive FixMyRoad brand identity, incorporating a road, location pin, or road-repair symbol.
+
+The role switcher should change the available interface and dashboard without requiring a full login system for the MVP. Clearly label this as demo-role switching, not production authentication.
+
+## 3. Landing page
+
+Create an impressive homepage that explains the product immediately.
+
+### Hero section
+
+Use this headline:
+
+**"Better Roads Begin With You."**
+
+Supporting text:
+
+"Spot a pothole? Report it in seconds. Our AI helps assess road damage, while citizens and municipal teams work together to make streets safer."
+
+Add two prominent buttons:
+- "Report a Pothole"
+- "Track a Report"
+
+Include a vibrant hero illustration or road-themed visual showing pothole reporting, AI analysis, and road repair.
+
+Below the hero, add four live statistics:
+- Total Reports
+- Reports Resolved
+- High-Severity Reports
+- Reports Under Review
+
+These statistics must be calculated from the stored reports, not permanently hardcoded. Clearly distinguish sample/demo data from actual data.
+
+### How It Works
+
+Show four visually engaging steps:
+1. Capture — Upload a pothole photo.
+2. Analyze — AI checks the image and estimates severity.
+3. Assign — An officer reviews the complaint and assigns a repair team.
+4. Resolve — The repair is completed and the citizen sees the status update.
+
+### Additional homepage sections
+
+Include:
+- Recently reported potholes.
+- Recently resolved reports.
+- A severity legend.
+- A community impact section.
+- A call-to-action encouraging citizens to report road damage.
+- A clean footer with About, Contact, Help, Privacy, and Terms links.
+
+## 4. Citizen portal: Report a Pothole
+
+Build a polished, easy-to-use reporting form.
+
+### Input fields
+
+1. Photo upload:
+   - Support JPG, JPEG, PNG, and WebP.
+   - Support drag-and-drop and file selection.
+   - Show a large image preview.
+   - Allow removing or replacing the selected image.
+   - Validate file type and size.
+   - Make the interface mobile-friendly.
+
+2. Location:
+   - Provide a searchable dropdown of predefined locations.
+   - Also allow users to type a road name, area, or landmark.
+   - Include sample locations for a demo, such as Main Road, Bus Stand Road, Market Road, College Road, and Station Road.
+   - Do not require GPS or interactive maps.
+
+3. Optional description:
+   - Let the citizen describe the road condition or nearby landmark.
+
+4. Submission button:
+   - "Analyze & Submit Report"
+
+### AI image analysis
+
+When the user selects a photo, let them initiate analysis using a vision-capable AI model through a secure backend endpoint.
+
+The AI should return structured data:
+- Whether a pothole is visible.
+- Severity: Low, Medium, High, or Unknown.
+- Confidence score, when supported by the model.
+- A short explanation based on visible evidence.
+- Whether manual review is recommended.
+
+Use a response format similar to:
+
+{
+  "is_pothole": true,
+  "severity": "high",
+  "confidence": 0.92,
+  "reason": "A large visible road-surface depression is present.",
+  "needs_manual_review": false
+}
+
+This is an illustrative response, not a predetermined result.
+
+Do not invent AI results. Validate the response and handle errors, uncertain images, non-pothole images, and API failures gracefully.
+
+If the AI detects no pothole, explain the result and allow the user to submit for manual officer review rather than silently discarding a potentially valid complaint.
+
+Show an attractive analysis panel with:
+- Image preview.
+- AI detection result.
+- Severity badge.
+- Confidence indicator, if returned.
+- AI explanation.
+- Clear retry and submit options.
+
+### Ticket generation
+
+After successful submission, create a unique ticket ID such as FMR-1001.
+
+Show an attractive success screen containing:
+- Ticket ID.
+- Uploaded photo.
+- Location.
+- AI severity.
+- Current status: Submitted.
+- Submission timestamp.
+- "View My Reports" button.
+
+Prevent accidental duplicate submissions caused by double-clicking.
+
+## 5. My Reports: citizen tracking
+
+Create a dashboard where citizens can view and follow their submitted complaints.
+
+Include:
+- Total reports submitted.
+- Reports still in progress.
+- Resolved reports.
+- Search by ticket ID or road name.
+- Filters by status, severity, and date.
+- Grid or list view with responsive report cards.
+
+Each report card should display:
+- Ticket ID.
+- Photo thumbnail.
+- Location.
+- Severity badge.
+- Current status.
+- Submitted date and last-updated date.
+- A "View Details" action.
+
+Inside report details, show a visual progress timeline:
+
+Submitted → Under Review → Assigned → Resolved
+
+Highlight the current stage. Show the date of each recorded status transition. If the report has not reached a stage, do not invent a completion date.
+
+Updates made from the officer dashboard must appear in the citizen's report view using shared persistent data.
+
+## 6. Municipal officer dashboard
+
+Build a separate, professional administrative dashboard.
+
+### Dashboard statistics
+
+Display:
+- Total complaints.
+- Newly submitted reports.
+- High-severity reports.
+- Reports awaiting assignment.
+- Assigned reports.
+- Resolved reports.
+- Resolution rate and average resolution time, when enough real data is available.
+
+### Reports management table
+
+Create a searchable, sortable, filterable table with the columns:
+- Ticket ID.
+- Pothole photograph.
+- Road / Location.
+- AI verification.
+- Severity.
+- Assigned team.
+- Submission date.
+- Current status.
+- Actions.
+
+Support filtering by:
+- Severity: Low, Medium, High, Unknown.
+- Status.
+- Location.
+- Submission date.
+
+Support keyword search by ticket ID or location.
+
+Put high-severity and unresolved reports near the top when the relevant sorting option is enabled.
+
+### Report details
+
+Clicking a report should open a side panel or details page with:
+- Large photo preview.
+- Location and description.
+- AI assessment and reason.
+- Severity.
+- Submission date.
+- Current status.
+- Status history.
+- Assigned team.
+- Officer notes.
+
+### Officer actions
+
+Implement functional actions:
+- Review a report.
+- Change severity if the AI result is inaccurate.
+- Add an internal note.
+- Assign a maintenance team.
+- Update the status using a dropdown.
+- Record the time of each status change.
+- Confirm before marking a ticket Resolved.
+- Optionally require a repair photo before resolution when this feature is enabled.
+
+Use these exact statuses:
+
+Submitted → Under Review → Assigned → Resolved
+
+Persist every update and reflect it in the citizen-facing view. Do not let the interface claim that a repair is completed merely because an unverified AI result exists.
+
+Use a confirmation dialog for important actions and show success or error feedback.
+
+## 7. Severity-based prioritization
+
+Use visually distinct severity badges:
+- Low: green or teal.
+- Medium: yellow or amber.
+- High: red.
+- Unknown: neutral gray.
+
+Offer an option to sort reports by severity and time waiting.
+
+Prioritize high-severity unresolved reports in the officer dashboard, but treat AI assessments as decision support rather than definitive safety judgments.
+
+Add a brief visual explanation of each severity level and allow authorized officers to correct the AI-generated classification.
+
+## 8. Useful additional features
+
+Implement these only after the core reporting workflow works.
+
+### Duplicate detection
+Warn the citizen if a recent report has a similar location and status. Offer the option to view the existing report instead. For an MVP, location and time-window matching is sufficient; advanced image similarity can come later.
+
+### Community upvotes
+Allow people to support an existing complaint. Display the count of unique supporters and avoid allowing repeated votes from the same demo user.
+
+### Repair verification
+Allow officers to attach a before-and-after photograph. Preserve both photos and show them in the report details.
+
+### Notifications
+Create in-app notifications or a notification center for status changes, assignments, and resolutions. If email or push delivery is not configured, label these as in-app notifications instead of claiming that external messages were sent.
+
+### Geographic overview
+Provide an optional simple location-based report summary. An interactive map or heatmap is a stretch goal and must not be necessary for the main workflow.
+
+### Audit history
+Track report creation, severity changes, assignments, and status updates with timestamps.
+
+## 9. Technology and backend
+
+Preferred stack:
+- Frontend: React + Vite.
+- Styling: Tailwind CSS.
+- Icons: Lucide.
+- Backend/data: Supabase or a secure backend API.
+- AI: One vision-capable model accessed through a server-side API endpoint.
+
+Choose one coherent implementation and avoid unnecessary libraries.
+
+### Database
+
+Create a reports table with fields equivalent to:
+
+- id
+- photo_url
+- location
+- description
+- is_pothole
+- severity
+- ai_confidence
+- ai_reason
+- needs_manual_review
+- status
+- assigned_team
+- created_at
+- updated_at
+
+Add related tables for status history, repair photos, notifications, and upvotes only if those features are implemented.
+
+Store photos in object storage and store the corresponding URL in the reports table.
+
+### Persistence requirements
+
+- Reports must survive page refreshes.
+- Citizen and officer interfaces must use the same reports.
+- Status and assignment changes must be persisted.
+- Use validation and clear error messages.
+- Use loading states for asynchronous operations.
+- Do not silently discard changes.
+- Do not expose API keys in frontend code.
+- Put secrets in environment variables and call the AI service through a backend or server-side function.
+- Do not expose unrestricted database permissions or allow unauthorized users to update officer-only fields.
+
+For a local demonstration without backend credentials, support an explicitly labelled demo mode using realistic sample reports and browser storage. Do not pretend that local demo data is shared across devices or represents a real municipal system.
+
+## 10. Sample data
+
+Seed the demo with at least eight realistic example reports across various statuses and severities, using clearly identified sample data.
+
+Include:
+- Two high-severity reports.
+- Two medium-severity reports.
+- Two low-severity reports.
+- At least one report awaiting review.
+- At least one assigned report.
+- At least one resolved report.
+
+Use realistic locations, plausible timestamps, and sample images. Make sure each card displays the correct status and severity.
+
+Sample reports should be replaceable by actual user-submitted reports. Dashboard counts and filters must update when reports are added, changed, or resolved.
+
+## 11. Functional requirements
+
+- Every navigation link must work.
+- Forms must validate required fields.
+- Photo previews must work.
+- Report creation must generate a persistent ticket.
+- AI results must come from the configured AI integration, or the interface must clearly state that demo mode is being used.
+- Search and filters must actually filter the displayed data.
+- Officer changes must update the citizen report view.
+- Use confirmation dialogs and toast notifications.
+- Display friendly empty states and error states.
+- Use responsive layouts on all screen sizes.
+- Make buttons and inputs accessible and keyboard-friendly.
+- Include sensible loading states.
+- Avoid broken links, placeholder buttons, and fake progress indicators.
+
+## 12. Four-hour MVP priority
+
+Prioritize functionality in this order:
+
+1. Build the vibrant responsive interface.
+2. Implement citizen/officer role switching.
+3. Implement photo upload and location selection.
+4. Connect one real AI image-analysis call.
+5. Generate and persist reports.
+6. Implement officer filtering, assignment, and status changes.
+7. Implement citizen report tracking.
+8. Test the complete workflow from submission to resolution.
+
+Treat duplicate detection, heatmaps, notifications, upvotes, and advanced analytics as optional additions.
+
+If a feature cannot be completed in the available time, keep it clearly labelled as a demo or coming-soon feature rather than creating a nonfunctional button.
+
+## 13. Final delivery requirements
+
+Deliver a complete runnable project with:
+- All source code.
+- Clean and organized components.
+- A reusable design system.
+- Setup and run instructions.
+- An example environment-variable file with placeholder values only.
+- Database schema and setup instructions.
+- Secure AI backend integration instructions.
+- Sample data and an explicit demo mode.
+- A working local development setup.
+- Deployment instructions.
+- A README describing the features and limitations.
+
+Before finishing, test the following complete scenario:
+
+A citizen uploads a photo, selects a location, receives an AI assessment, and submits a report. The system generates a ticket ID. A municipal officer opens the dashboard, reviews the report, assigns a team, changes the status to Assigned, and later marks it Resolved. The citizen then sees the updated status and timeline in My Reports.
+
+Build FixMyRoad as a polished, vibrant, functional product with a seamless user experience. Prioritize the complete end-to-end workflow, a beautiful interface, reliable AI integration, and persistent data over adding many incomplete features.

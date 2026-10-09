@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "FixMyRoad"
+description = "A civic-tech platform where residents report potholes, review AI-assisted damage assessments, and track municipal repair progress."
+version = "1.0.0"
+id = "artifacts/fixmyroad"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22348
+
+[services.development]
+run = "pnpm --filter @workspace/fixmyroad run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/fixmyroad", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/fixmyroad/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22348"
+BASE_PATH = "/"
