@@ -8,9 +8,8 @@ import {
 import { PhotoCapture } from '@/components/camera';
 import { Spinner } from '@/components/bits';
 import { api, ApiError } from '@/lib/api';
-import { categoryMeta, isHighPrioritySeason } from '@/lib/meta';
+import { categoryMeta } from '@/lib/meta';
 import type { AnalysisResult, Category, Report } from '@/lib/types';
-import { SeasonBanner } from './overview';
 
 type Step = 'photo' | 'details' | 'done';
 
@@ -120,13 +119,11 @@ export default function ReportIssue() {
     );
   };
 
-  const highSeason = isHighPrioritySeason();
   const detailsValid = location.trim().length >= 3;
 
   return (
     <div className="stack-lg" style={{ maxWidth: 760, margin: '0 auto' }}>
       <Stepper step={step} />
-      {step !== 'done' && <SeasonBanner />}
 
       {step === 'photo' && (
         <div className="card card-pad stack">
@@ -163,20 +160,11 @@ export default function ReportIssue() {
               <div className="ai-card-head">
                 <Sparkles size={17} />
                 {analysis.is_pothole
-                  ? `Pothole detected — ${analysis.severity === 'unknown' ? 'needs inspection' : `${analysis.severity} severity`}`
+                  ? `Pothole detected — ${analysis.severity === 'unknown' ? 'Needs Review' : `${analysis.severity[0].toUpperCase()}${analysis.severity.slice(1)} priority candidate`}`
                   : 'No clear pothole detected'}
               </div>
               <p className="detail-text">{analysis.reason}</p>
-              {analysis.confidence !== null && (
-                <div>
-                  <div className="ai-meter" aria-hidden="true">
-                    <div className="ai-meter-fill" style={{ width: `${Math.round(analysis.confidence * 100)}%` }} />
-                  </div>
-                  <p className="detail-text muted" style={{ marginTop: 6, fontSize: 12.5 }}>
-                    Model confidence {Math.round(analysis.confidence * 100)}% · advisory only — an officer reviews every report
-                  </p>
-                </div>
-              )}
+              <p className="detail-text muted" style={{ marginTop: 8, fontSize: 12.5 }}>AI assessment is advisory; an officer reviews every report.</p>
             </div>
           )}
 
@@ -205,7 +193,7 @@ export default function ReportIssue() {
           <div>
             <h2 className="section-title" style={{ marginBottom: 4 }}>Where is the pothole?</h2>
             <p style={{ color: 'var(--ink-2)', fontSize: 14 }}>
-              Location details set the priority. Schools and hospitals are always high priority; highways are medium.
+              Your exact location is preserved and used only to look up separate weather context. AI image evidence remains primary.
             </p>
           </div>
 
@@ -257,9 +245,7 @@ export default function ReportIssue() {
               ))}
             </select>
             <p className="field-hint">
-              {highSeason
-                ? 'High-priority season is active — every report is treated as high priority until February.'
-                : categoryMeta[category].hint}
+              {categoryMeta[category].hint}
             </p>
           </div>
 

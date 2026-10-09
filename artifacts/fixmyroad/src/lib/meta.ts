@@ -42,16 +42,11 @@ export const severityMeta: Record<Severity, { label: string; className: string }
 };
 
 export const categoryMeta: Record<Category, { label: string; hint: string }> = {
-  normal: { label: 'City / residential road', hint: 'Standard priority outside the high-priority season.' },
-  school: { label: 'Near a school', hint: 'School zones are always treated as high priority.' },
-  hospital: { label: 'Near a hospital', hint: 'Hospital zones are always treated as high priority.' },
-  highway: { label: 'Highway or main road', hint: 'Highways are treated as medium priority outside the season.' },
+  normal: { label: 'City / residential road', hint: 'AI image evidence determines the initial priority.' },
+  school: { label: 'Near a school', hint: 'This category is retained as reporter context; image evidence remains primary.' },
+  hospital: { label: 'Near a hospital', hint: 'This category is retained as reporter context; image evidence remains primary.' },
+  highway: { label: 'Highway or main road', hint: 'This category is retained as reporter context; image evidence remains primary.' },
 };
-
-export function isHighPrioritySeason(date = new Date()): boolean {
-  const month = date.getMonth();
-  return month >= 9 || month <= 1;
-}
 
 export function reportPhoto(photo: string, severity: Severity): string {
   return photo || `/sample-road-${severity}.svg`;

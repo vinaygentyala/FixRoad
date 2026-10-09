@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { attachUser, getUser, requireRole } from "../lib/auth";
 import { computePriority, categories, type Category, type Priority } from "../lib/priority";
 import { store, type Report, type Severity, type Status } from "../lib/store";
+import { assessLocationWeather } from "../lib/weather";
 
 const router: IRouter = Router();
 router.use(attachUser);
@@ -26,7 +27,7 @@ function notifyReporter(report: Report, title: string, body: string) {
   });
 }
 
-router.post("/reports", requireRole("reporter"), (req, res) => {
+router.post("/reports", requireRole("reporter"), async (req, res) => {
   const body = req.body as Record<string, unknown>;
   const photo = typeof body?.photo === "string" ? body.photo : "";
   const location = typeof body?.location === "string" ? body.location.trim() : "";
@@ -60,7 +61,8 @@ router.post("/reports", requireRole("reporter"), (req, res) => {
       ? analysis.confidence
       : null;
 
-  const { priority, reason } = computePriority(category);
+  const weather = await assessLocationWeather(location);
+  const { priority, reason } = computePriority(aiSeverity, weather, category);
 
   const report = store.createReport({
     reporterId: getUser(req)!.id,
@@ -81,6 +83,7 @@ router.post("/reports", requireRole("reporter"), (req, res) => {
     status: "Submitted",
     assignedTeam: "",
     officerNotes: "",
+    weather,
   });
 
   for (const user of store.users) {
@@ -152,7 +155,8 @@ router.patch("/reports/:id", requireRole("officer"), (req, res) => {
     }
     if (priority !== report.priority) {
       report.priority = priority;
-      report.priorityReason = `Set manually by ${officer.name}.`;
+      const reason = typeof body.priorityReason === "string" ? body.priorityReason.trim().slice(0, 500) : "";
+      report.priorityReason = `Officer correction by ${officer.name}${reason ? `: ${reason}` : "."}`;
     }
   }
 

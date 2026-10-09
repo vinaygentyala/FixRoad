@@ -1,11 +1,10 @@
 import { Link, Redirect } from 'wouter';
 import {
   ArrowRight, BellRing, Camera, CheckCircle2, Construction, HardHat,
-  MapPin, ShieldCheck, Snowflake, Sparkles, UserRound,
+  MapPin, ShieldCheck, Sparkles, UserRound,
 } from 'lucide-react';
 import { LoaderScreen } from '@/components/bits';
 import { roleHome } from '@/components/shell';
-import { isHighPrioritySeason } from '@/lib/meta';
 import { useSession } from '@/lib/session';
 
 export default function Landing() {
@@ -14,7 +13,6 @@ export default function Landing() {
   if (isLoading) return <LoaderScreen />;
   if (user) return <Redirect to={roleHome(user.role)} />;
 
-  const highSeason = isHighPrioritySeason();
 
   return (
     <div className="landing">
@@ -35,7 +33,7 @@ export default function Landing() {
         <div>
           <span className="eyebrow">
             <span className="eyebrow-dot" />
-            {highSeason ? 'High-priority season is active (Oct–Feb)' : 'Citizen + officer road repair network'}
+            Citizen + officer road repair network
           </span>
           <h1>
             Spot it. Report it.<br />
@@ -110,10 +108,10 @@ export default function Landing() {
             </div>
           </div>
           <div className="strip-item">
-            <span className="strip-icon"><Snowflake size={19} /></span>
+            <span className="strip-icon"><MapPin size={19} /></span>
             <div>
-              <h4>Seasonal priorities</h4>
-              <p>October to February every report is high priority. Schools and hospitals always are.</p>
+              <h4>Location-aware context</h4>
+              <p>AI reads visible damage first, with weather checked for the location the reporter supplied.</p>
             </div>
           </div>
           <div className="strip-item">

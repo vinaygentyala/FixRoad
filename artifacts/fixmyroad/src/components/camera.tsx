@@ -4,6 +4,8 @@ import { Spinner } from './bits';
 
 const MAX_DIMENSION = 1280;
 const JPEG_QUALITY = 0.82;
+const MAX_FILE_BYTES = 6 * 1024 * 1024;
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 async function fileToDataUrl(file: File): Promise<string> {
   const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -57,6 +59,7 @@ export function PhotoCapture({ photo, onCapture, onClear }: { photo: string | nu
     setError('');
     setStarting(true);
     try {
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error('unsupported');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } },
         audio: false,
@@ -67,8 +70,10 @@ export function PhotoCapture({ photo, onCapture, onClear }: { photo: string | nu
         await videoRef.current.play();
       }
       setCameraOn(true);
-    } catch {
-      setError('Camera access was blocked. Allow camera permission, or upload a photo instead.');
+    } catch (err) {
+      setError(err instanceof Error && err.message === 'unsupported'
+        ? 'This browser does not support camera access. Upload a JPG, PNG, or WebP photo instead.'
+        : 'Camera access was blocked or no camera is available. Allow permission, or upload a photo instead.');
     } finally {
       setStarting(false);
     }
@@ -91,6 +96,14 @@ export function PhotoCapture({ photo, onCapture, onClear }: { photo: string | nu
   const pickFile = async (file: File | undefined) => {
     if (!file) return;
     setError('');
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      setError('That file type is not supported. Choose a JPG, JPEG, PNG, or WebP image.');
+      return;
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setError('That image is too large. Choose a file under 6 MiB.');
+      return;
+    }
     try {
       onCapture(await fileToDataUrl(file));
     } catch (err) {

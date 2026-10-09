@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import {
-  ArrowRight, Camera, CheckCircle2, ClipboardList, Clock3, Snowflake, Wrench,
+  ArrowRight, Camera, CheckCircle2, ClipboardList, Clock3, Wrench,
 } from 'lucide-react';
 import { EmptyState, Spinner, StatCard } from '@/components/bits';
 import { ReportCard, ReportModal } from '@/components/report';
 import { api } from '@/lib/api';
-import { isHighPrioritySeason } from '@/lib/meta';
 import type { Report } from '@/lib/types';
 
 export function useMyReports() {
@@ -15,21 +14,6 @@ export function useMyReports() {
     queryKey: ['reports', 'mine'],
     queryFn: () => api<{ reports: Report[] }>('/api/reports/mine'),
   });
-}
-
-export function SeasonBanner() {
-  if (!isHighPrioritySeason()) return null;
-  return (
-    <div className="season-banner">
-      <span className="season-banner-icon">
-        <Snowflake size={20} />
-      </span>
-      <div>
-        <strong>High-priority season is active (October–February)</strong>
-        <p>Winter road damage peaks in these months, so every new report is automatically treated as high priority.</p>
-      </div>
-    </div>
-  );
 }
 
 export default function ReporterOverview() {
@@ -44,7 +28,6 @@ export default function ReporterOverview() {
 
   return (
     <div className="stack-lg">
-      <SeasonBanner />
 
       <div className="stat-grid">
         <StatCard icon={<ClipboardList size={20} />} value={reports.length} label="Reports submitted" tone="brand" />

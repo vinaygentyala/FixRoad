@@ -32,7 +32,7 @@ const copy: Record<Role, {
   },
   officer: {
     heading: 'Triage faster. Repair what matters first.',
-    sub: 'The officer portal brings every report into one prioritized queue with seasonal rules built in.',
+    sub: 'The officer portal brings every report into one evidence-led repair queue.',
     points: [
       { icon: ClipboardList, text: 'All reports in one prioritized queue' },
       { icon: ShieldCheck, text: 'Seasonal and zone-based priority rules' },

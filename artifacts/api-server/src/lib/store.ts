@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { computePriority, type Category, type Priority } from "./priority";
+import { computePriority, type Category, type Priority, type WeatherContext } from "./priority";
 
 export type Role = "reporter" | "officer";
 export type Severity = "low" | "medium" | "high" | "unknown";
@@ -54,6 +54,7 @@ export interface Report {
   statusHistory: StatusEntry[];
   createdAt: string;
   updatedAt: string;
+  weather?: WeatherContext;
 }
 
 export interface AppNotification {
@@ -232,7 +233,7 @@ function seed(): Database {
     if (row.status === "Resolved") {
       history.push({ status: "Resolved", at: isoDaysAgo(Math.max(0, row.days - 2), 16), by: "Ananya Rao" });
     }
-    const { priority, reason } = computePriority(row.category, new Date(createdAt));
+    const { priority, reason } = computePriority(row.severity, undefined, row.category);
     return {
       id: `seed-report-${i + 1}`,
       ticketId: row.ticket,
@@ -260,6 +261,7 @@ function seed(): Database {
       statusHistory: history,
       createdAt,
       updatedAt: history[history.length - 1].at,
+      weather: { available: false, source: "Not assessed for seeded report", assessedAt: createdAt, locationQuery: row.location, note: "Seed data has no location-specific weather assessment." },
     };
   });
 

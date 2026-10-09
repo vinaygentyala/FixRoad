@@ -60,6 +60,7 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
   const [priority, setPriority] = useState<Priority>(report.priority);
   const [team, setTeam] = useState(report.assignedTeam);
   const [notes, setNotes] = useState(report.officerNotes);
+  const [correctionReason, setCorrectionReason] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
     setPriority(report.priority);
     setTeam(report.assignedTeam);
     setNotes(report.officerNotes);
+    setCorrectionReason('');
     setError('');
   }, [report]);
 
@@ -84,8 +86,8 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
     },
   });
 
-  const saveFields = () => update.mutate({ severity, priority, assignedTeam: team, officerNotes: notes });
-  const startWork = () => update.mutate({ status: 'In Progress' satisfies Status, severity, priority, assignedTeam: team, officerNotes: notes });
+  const saveFields = () => update.mutate({ severity, priority, priorityReason: correctionReason, assignedTeam: team, officerNotes: notes });
+  const startWork = () => update.mutate({ status: 'In Progress' satisfies Status, severity, priority, priorityReason: correctionReason, assignedTeam: team, officerNotes: notes });
   const resolve = () => update.mutate({ status: 'Resolved' satisfies Status, officerNotes: notes });
 
   return (
@@ -114,9 +116,9 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
               <p className="detail-text">{report.reporterName} · {fmtDate(report.createdAt, true)}</p>
             </div>
             <div>
-              <div className="detail-label">Location</div>
-              <p className="detail-text">{categoryMeta[report.category].label}</p>
-              {report.landmark && <p className="detail-text muted">{report.landmark}</p>}
+              <div className="detail-label">Reporter-provided location</div>
+              <p className="detail-text">{report.location}</p>
+              <p className="detail-text muted">{categoryMeta[report.category].label}{report.landmark ? ` · ${report.landmark}` : ''}</p>
             </div>
             {report.description && (
               <div>
@@ -131,6 +133,15 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
           </div>
         </div>
 
+        <div className="detail-block" style={{ marginTop: 16 }}>
+          <div className="detail-label">Weather context · system-generated</div>
+          {report.weather?.available ? (
+            <p className="detail-text">{report.weather.summary} {report.weather.precipitationMm !== undefined ? `${report.weather.precipitationMm.toFixed(1)} mm precipitation` : ''}{report.weather.rainProbability !== undefined ? ` · ${report.weather.rainProbability}% rain probability` : ''}.<br /><span className="muted">{report.weather.source} · assessed {fmtDate(report.weather.assessedAt, true)} · resolved as {report.weather.resolvedLocation || report.weather.locationQuery}</span></p>
+          ) : (
+            <p className="detail-text muted">{report.weather?.note || 'Weather was not available for this report. The image assessment remains usable.'}</p>
+          )}
+        </div>
+
         {(report.aiReason || report.aiConfidence !== null) && (
           <div className={`ai-card ${report.needsManualReview ? 'warn' : 'ok'}`}>
             <div className="ai-card-head">
@@ -138,16 +149,7 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
               AI assessment {report.needsManualReview ? '— manual review advised' : ''}
             </div>
             <p className="detail-text">{report.aiReason || 'No AI assessment was available for this report.'}</p>
-            {report.aiConfidence !== null && (
-              <div>
-                <div className="ai-meter" aria-hidden="true">
-                  <div className="ai-meter-fill" style={{ width: `${Math.round(report.aiConfidence * 100)}%` }} />
-                </div>
-                <p className="detail-text muted" style={{ marginTop: 6, fontSize: 12.5 }}>
-                  Model confidence {Math.round(report.aiConfidence * 100)}% · advisory only
-                </p>
-              </div>
-            )}
+
           </div>
         )}
 
@@ -210,6 +212,10 @@ export function ReportModal({ report, isOfficer, onClose }: { report: Report; is
                     <option key={t} value={t}>{t}</option>
                   ))}
                 </select>
+              </div>
+              <div className="wide">
+                <label className="field-label" htmlFor="m-priority-reason">Priority correction reason</label>
+                <input id="m-priority-reason" className="field" value={correctionReason} onChange={(e) => setCorrectionReason(e.target.value)} placeholder="Explain any change to the AI recommendation" maxLength={500} />
               </div>
               <div className="wide">
                 <label className="field-label" htmlFor="m-notes">Officer notes</label>

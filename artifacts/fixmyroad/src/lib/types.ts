@@ -1,6 +1,18 @@
 export type Role = 'reporter' | 'officer';
 export type Severity = 'low' | 'medium' | 'high' | 'unknown';
 export type Priority = 'high' | 'medium' | 'low';
+
+export interface WeatherContext {
+  available: boolean;
+  source: string;
+  assessedAt: string;
+  locationQuery: string;
+  resolvedLocation?: string;
+  precipitationMm?: number;
+  rainProbability?: number;
+  summary?: string;
+  note: string;
+}
 export type Status = 'Submitted' | 'In Progress' | 'Resolved';
 export type Category = 'school' | 'hospital' | 'highway' | 'normal';
 
@@ -42,6 +54,7 @@ export interface Report {
   statusHistory: StatusEntry[];
   createdAt: string;
   updatedAt: string;
+  weather?: WeatherContext;
 }
 
 export interface AppNotification {

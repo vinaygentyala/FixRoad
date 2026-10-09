@@ -9,7 +9,6 @@ import { ReportCard, ReportModal } from '@/components/report';
 import { api } from '@/lib/api';
 import { categoryMeta } from '@/lib/meta';
 import type { Category, Report } from '@/lib/types';
-import { SeasonBanner } from '../reporter/overview';
 
 export function useAllReports() {
   return useQuery({
@@ -50,8 +49,6 @@ export default function OfficerOverview() {
 
   return (
     <div className="stack-lg">
-      <SeasonBanner />
-
       <div className="stat-grid">
         <StatCard icon={<ClipboardList size={20} />} value={active.length} label="Active reports" tone="brand" />
         <StatCard icon={<Flame size={20} />} value={highPriority.length} label="High priority open" tone="rose" />
@@ -102,7 +99,7 @@ export default function OfficerOverview() {
             </span>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: 14.5 }}>{highPriority.length} high-priority report{highPriority.length === 1 ? '' : 's'} open</div>
-              <div style={{ color: 'var(--ink-2)', fontSize: 13 }}>School zones, hospitals, and seasonal reports land here.</div>
+              <div style={{ color: 'var(--ink-2)', fontSize: 13 }}>Image-assessed urgent reports land here.</div>
             </div>
             <Link href="/officer/priority" className="btn btn-outline btn-sm">
               Review <ArrowRight size={14} />

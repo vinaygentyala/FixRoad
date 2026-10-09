@@ -7,8 +7,7 @@ export default function HighPriority() {
       <div className="form-note amber">
         <Flame size={16} />
         <span>
-          High-priority reports come from school and hospital zones year-round, and from every zone during the
-          October–February high-priority season. Officers can also raise priority manually.
+          High-priority reports are surfaced from the AI image assessment and transparent location-specific context. Officers can correct the recommendation after inspecting the evidence.
         </span>
       </div>
       <ReportBrowser

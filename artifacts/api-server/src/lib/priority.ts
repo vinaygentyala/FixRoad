@@ -3,31 +3,42 @@ export type Priority = "high" | "medium" | "low";
 
 export const categories: Category[] = ["school", "hospital", "highway", "normal"];
 
-export function isHighPrioritySeason(date: Date = new Date()): boolean {
-  const month = date.getMonth();
-  // October (9) through February (1) — rain and freeze-thaw damage peaks.
-  return month >= 9 || month <= 1;
+export interface WeatherContext {
+  available: boolean;
+  source: string;
+  assessedAt: string;
+  locationQuery: string;
+  resolvedLocation?: string;
+  precipitationMm?: number;
+  rainProbability?: number;
+  summary?: string;
+  note: string;
 }
 
+/** Image evidence is the primary signal. Weather can only raise a medium result when the
+ * provider reports current/recent or near-term rain above the configured thresholds. */
 export function computePriority(
+  severity: "low" | "medium" | "high" | "unknown",
+  weather: WeatherContext | undefined,
   category: Category,
-  date: Date = new Date(),
 ): { priority: Priority; reason: string } {
-  if (isHighPrioritySeason(date)) {
-    return {
-      priority: "high",
-      reason:
-        "High-priority season (October–February): every new report is treated as high priority.",
-    };
+  if (severity === "high") {
+    return { priority: "high", reason: "AI image assessment found substantial visible road damage." };
   }
-  if (category === "school" || category === "hospital") {
-    return {
-      priority: "high",
-      reason: "Located near a school or hospital zone.",
-    };
+  if (severity === "medium") {
+    const wet = Boolean(weather?.available && ((weather.precipitationMm ?? 0) >= 5 || (weather.rainProbability ?? 0) >= 60));
+    if (wet) {
+      return { priority: "high", reason: "AI image assessment found a medium defect; location-specific wet-weather risk raises attention." };
+    }
+    return { priority: "medium", reason: "AI image assessment found a clearly visible moderate road defect." };
   }
-  if (category === "highway") {
-    return { priority: "medium", reason: "Located on a highway or main road." };
+  if (severity === "low") {
+    return { priority: "low", reason: "AI image assessment found a minor, localized road defect." };
   }
-  return { priority: "low", reason: "Standard residential or city road." };
+
+  // A review state is separate from the three priority labels. Keep a conservative queue value
+  // for sorting without presenting it as an AI decision.
+  if (category === "school" || category === "hospital") return { priority: "high", reason: "Needs Review: image evidence is insufficient; location category is retained for queueing." };
+  if (category === "highway") return { priority: "medium", reason: "Needs Review: image evidence is insufficient; road category is retained for queueing." };
+  return { priority: "low", reason: "Needs Review: image evidence is insufficient for a reliable priority decision." };
 }
