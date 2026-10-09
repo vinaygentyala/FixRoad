@@ -69,14 +69,14 @@ router.post("/analysis/potholes", async (req, res) => {
     return;
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.AI_GATEWAY_API_KEY;
   if (!apiKey) {
     res.status(503).json({ error: "AI analysis is not configured. You can still submit this report for officer review." });
     return;
   }
 
   try {
-    const modelResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    const modelResponse = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -84,7 +84,7 @@ router.post("/analysis/potholes", async (req, res) => {
       },
       signal: AbortSignal.timeout(45_000),
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
+        model: "openai/gpt-4.1-mini",
         max_tokens: 450,
         response_format: {
           type: "json_schema",
@@ -120,7 +120,7 @@ router.post("/analysis/potholes", async (req, res) => {
     if (!modelResponse.ok) {
       req.log.warn(
         { status: modelResponse.status },
-        "OpenAI image analysis request was rejected",
+        "AI Gateway image analysis request was rejected",
       );
       res.status(503).json({ error: "Image analysis is temporarily unavailable. You can still submit for manual review." });
       return;
