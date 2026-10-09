@@ -35,8 +35,9 @@ function rateLimited(req: Request, res: Response): boolean {
 function setSessionCookie(res: Response, token: string, expiresAt: string) {
   res.cookie(SESSION_COOKIE, token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    // Public Preview is HTTPS and may be embedded cross-site; local HTTP stays usable.
+    sameSite: process.env.PUBLIC_HTTPS === "true" ? "none" : "lax",
+    secure: process.env.PUBLIC_HTTPS === "true",
     expires: new Date(expiresAt),
     path: "/",
   });
