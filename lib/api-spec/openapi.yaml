@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: pothole-analysis
+    description: Secure, server-side AI image assessment
 paths:
   /healthz:
     get:
@@ -24,6 +26,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /analysis/potholes:
+    post:
+      operationId: analyzePothole
+      tags: [pothole-analysis]
+      summary: Analyze a road damage photograph
+      description: Uses a server-side vision model to assess a submitted photograph. AI results are advisory and may require officer review.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PotholeAnalysisInput"
+      responses:
+        "200":
+          description: Image assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PotholeAnalysis"
+        "400":
+          description: Invalid image input
+        "503":
+          description: AI analysis is unavailable
 components:
   schemas:
     HealthStatus:
@@ -33,4 +58,35 @@ components:
           type: string
       required:
         - status
+    PotholeAnalysisInput:
+      type: object
+      properties:
+        imageData:
+          type: string
+          description: Base64-encoded image data URL. Limit to 6 MiB.
+          maxLength: 8388608
+      required:
+        - imageData
+    PotholeAnalysis:
+      type: object
+      properties:
+        is_pothole:
+          type: boolean
+        severity:
+          type: string
+          enum: [low, medium, high, unknown]
+        confidence:
+          type: ["number", "null"]
+          minimum: 0
+          maximum: 1
+        reason:
+          type: string
+        needs_manual_review:
+          type: boolean
+      required:
+        - is_pothole
+        - severity
+        - confidence
+        - reason
+        - needs_manual_review
 

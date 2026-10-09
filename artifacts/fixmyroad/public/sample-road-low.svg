@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Illustration of a small road surface depression">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#c9edf1"/><stop offset="1" stop-color="#edf5da"/></linearGradient>
+    <linearGradient id="asphalt" x2="0" y2="1"><stop stop-color="#64727d"/><stop offset="1" stop-color="#394755"/></linearGradient>
+    <radialGradient id="hole"><stop stop-color="#18232c"/><stop offset=".7" stop-color="#25313b"/><stop offset="1" stop-color="#89939a"/></radialGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#sky)"/><path d="M0 176 800 161 800 400 0 400Z" fill="url(#asphalt)"/>
+  <path d="m388 168 22 232h-10l-21-232zm71-1 46 233h-10l-44-233z" fill="#facc15" opacity=".84"/>
+  <path d="M90 228 279 195l36 22-197 30zM610 189l117 16 25 20-133-15z" fill="#9aa5a8" opacity=".36"/>
+  <path d="M341 324c12-17 43-21 60-9 9 6 9 18-2 26-16 11-49 14-60 3-6-5-5-13 2-20Z" fill="url(#hole)"/>
+  <g fill="#c5ccca" opacity=".38"><circle cx="115" cy="334" r="3"/><circle cx="256" cy="267" r="2"/><circle cx="550" cy="327" r="3"/><circle cx="688" cy="290" r="2"/><circle cx="457" cy="364" r="2"/></g>
+</svg>

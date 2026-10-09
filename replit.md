@@ -1,10 +1,11 @@
-# [Project name]
+# FixMyRoad
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A civic-tech demo for citizen pothole reporting, AI-assisted image assessment, and municipal repair tracking.
 
 ## Run & Operate
 
 - `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/fixmyroad run dev` — run the FixMyRoad web app
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -22,15 +23,19 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/fixmyroad/` — FixMyRoad React app and setup notes
+- `artifacts/api-server/src/routes/analysis.ts` — server-side pothole photo assessment
+- `lib/api-spec/openapi.yaml` — API contract source of truth
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The first build stores reports and sample data in browser local storage; it is a same-browser demo, not shared municipal storage.
+- Demo citizen/officer role switching is not authentication. Add identity and role authorization before enabling shared report writes.
+- AI photo assessment runs through the server and reads `OPENAI_API_KEY` from Replit Secrets; never expose the key to the browser.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Citizens can submit pothole photos, receive a model assessment, and follow tickets. Officers can review reports, change severity, assign teams, add notes, and move a report through the status timeline.
 
 ## User preferences
 

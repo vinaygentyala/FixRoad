@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Illustration of a road surface that needs inspection">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#dce8f5"/><stop offset="1" stop-color="#e9f3e9"/></linearGradient>
+    <linearGradient id="asphalt" x2="0" y2="1"><stop stop-color="#66727d"/><stop offset="1" stop-color="#3a4653"/></linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#sky)"/><path d="M0 176 800 161 800 400 0 400Z" fill="url(#asphalt)"/>
+  <path d="m388 168 22 232h-10l-21-232zm71-1 46 233h-10l-44-233z" fill="#facc15" opacity=".76"/>
+  <path d="m196 263 22 18-11 8 23 16-12 11 31 13m146-91-12 16 15 9-20 15m177-42 18 20-13 8 18 18" fill="none" stroke="#aab4b7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".65"/>
+  <g fill="#c5ccca" opacity=".38"><circle cx="90" cy="336" r="3"/><circle cx="327" cy="247" r="2"/><circle cx="576" cy="324" r="3"/><circle cx="705" cy="287" r="2"/><circle cx="452" cy="359" r="2"/></g>
+</svg>

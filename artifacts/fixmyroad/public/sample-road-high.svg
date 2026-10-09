@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Illustration of large potholes on an asphalt road">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#b9e7e7"/><stop offset="1" stop-color="#e9f5e9"/></linearGradient>
+    <linearGradient id="asphalt" x2="0" y2="1"><stop stop-color="#4c5966"/><stop offset="1" stop-color="#293746"/></linearGradient>
+    <radialGradient id="hole"><stop stop-color="#101923"/><stop offset=".72" stop-color="#17212a"/><stop offset="1" stop-color="#73808a"/></radialGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#sky)"/><path d="M0 170 800 160 800 400 0 400Z" fill="url(#asphalt)"/>
+  <path d="m400 170 22 230h-10l-20-230zm70 0 45 230h-10l-43-230z" fill="#facc15" opacity=".9"/>
+  <path d="M80 214 280 188l48 27-212 34zM600 190l123 12 38 25-155-15z" fill="#687581" opacity=".55"/>
+  <path d="M177 284c23-30 93-38 130-12 18 13 20 39-3 54-36 23-112 27-137 5-13-12-8-32 10-47Z" fill="url(#hole)"/>
+  <path d="M483 315c19-24 69-31 99-13 15 9 17 27-2 39-27 17-82 21-101 5-10-8-8-21 4-31Z" fill="url(#hole)"/>
+  <g fill="#a7b2b8" opacity=".38"><circle cx="90" cy="332" r="3"/><circle cx="358" cy="265" r="2"/><circle cx="696" cy="310" r="3"/><circle cx="422" cy="364" r="2"/><circle cx="270" cy="225" r="2"/></g>
+</svg>
